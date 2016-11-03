@@ -6,7 +6,7 @@
 <x-button slot="right" :class="{'btn-active':isFilled()}" style="background-color:#e2e2e2;color:#fff;margin:20px 20px;width:calc( 100% - 40px )" v-tap="isFilled()?nextStep():return">提交</x-button>
 <j-tel></j-tel> -->
 <group title="请完成您的设计方案:">
-    <x-input :value.sync="order.plan.price" title="请输入方案价格"></x-input>
+    <x-input :value.sync="order.plan.price" title="请输入方案价格" keyborad="number"></x-input>
 </group>
 <group title="请输入您的方案描述">
     <x-textarea :value.sync="order.plan.description"></x-textarea>
@@ -26,6 +26,9 @@
 <group>
     <j-to-upload-photo title="请上传您的方案图片" value="点击上传或拍摄您的|方案图片" v-tap="getInfo()"></j-to-upload-photo>
 </group>
+<div class="status-3-btn" v-tap="submit()">
+  <div class="btn-right">确认修改</div>
+</div>
 </template>
 
 <script>
@@ -139,5 +142,17 @@ body {
         top: 10px;
         z-index: 2;
     }
+}
+.status-3-btn {
+    position: relative;
+    width: calc(~"100% - 30px");
+    margin-left: 15px;
+    border-radius: 2px;
+    height: 44px;
+    margin-top: 10px;
+    background-color: rgb(158, 188, 43);
+    color: #fff;
+    line-height: 44px;
+    text-align: center;
 }
 </style>
