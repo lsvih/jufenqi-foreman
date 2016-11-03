@@ -19,7 +19,7 @@
 </group>
 <group title="您即将上传的方案图片" v-if="addImages.length!=0">
     <div class="plan-image" v-for="image in addImages">
-        <img class="image" :src="image">
+        <img class="image" :src="image.local">
         <img src="./del.png" class="del" v-tap="delAdd($index)">
     </div>
 </group>
@@ -27,7 +27,7 @@
     <j-to-upload-photo title="请上传您的方案图片" value="点击上传或拍摄您的|方案图片" v-tap="getInfo()"></j-to-upload-photo>
 </group>
 <div class="status-3-btn" v-tap="submit()">
-  <div class="btn-right">确认修改</div>
+    <div class="btn-right">确认修改</div>
 </div>
 </template>
 
@@ -81,7 +81,10 @@ export default {
                         isShowProgressTips: 1, // 默认为1，显示进度提示
                         success: function(res) {
                             var serverId = res.serverId // 返回图片的服务器端ID
-                            that.addImages.push(serverId)
+                            that.addImages.push({
+                                local: thisId,
+                                server: serverId
+                            })
                         }
                     })
                 }
@@ -95,12 +98,16 @@ export default {
             this.addImages.splice(index, 1)
         },
         submit() {
+            let upImg = []
+            this.addImages.map((e) => {
+                upImg.push(e.server)
+            })
             this.$http.put(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`, {
                 "description": this.order.plan.description,
                 "price": Number(this.order.plan.price),
                 "deletedImages": this.delImages,
                 "newImages": [],
-                "newWechatImages": this.addImages
+                "newWechatImages": upImg
             }).then((res) => {
                 alert("更新设计方案成功")
                 location.href = './index.html'
