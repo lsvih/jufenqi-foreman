@@ -1,7 +1,7 @@
 <template>
 <header>
   <img src="status.png">
-  <div class="status">{{zxStatusList[order.status].name}}</div>
+  <div class="status">{{zxStatusList[order.plan.status].name}}</div>
 </header>
 <div class="butler">
   <div class="zx-butler-img"><img :src="order.manager.profileImage"></div>
@@ -14,7 +14,7 @@
   <div class="zx-butler-tel" onclick="location.href='tel:{{order.projectManager.mobile}}'"><img src="tel.png"></div>
 </div>
 <div class="content">
-  <group class="contact" style="margin-top:-1.17647059em;" v-if="order.status==1||order.status==2">
+  <group class="contact" style="margin-top:-1.17647059em;" v-if="order.plan.status==1||order.plan.status==2">
     <div class="zc-line-3">
       <div class="zc-butler-img"><img :src="order.plan.foreman.profileImage"></div>
       <div class="zc-butler-name">{{order.plan.foreman.nickname}}</div>
@@ -23,7 +23,7 @@
 </div>
 </group>
 
-<group title="设计方案" v-if="order.status>=2">
+<group title="设计方案" v-if="order.plan.status>=2">
   <div class="module-item">
     <scroller lock-y scrollbar-x :height=".8*getScreenWidth()*.63+20+'px'" v-ref:plan>
       <div class="worker-product-list" :style="{width:order.plan.images.length*(.8*getScreenWidth()+10)+  'px',height:.8*getScreenWidth()*.63+'px'}">
@@ -34,7 +34,7 @@
     </scroller>
   </div>
 </group>
-<div class="contact" v-if="order.status>=2">
+<div class="contact" v-if="order.plan.status>=2">
 
   <div class="zc-line-3">
     <div class="zc-butler-img"><img :src="order.plan.foreman.profileImage"></div>
@@ -44,7 +44,7 @@
 
 </div>
 
-<div v-if="order.status>=2&&order.status<=6">
+<div v-if="order.plan.status>=2&&order.plan.status<=6">
   <group title="方案说明">
     <article>{{order.plan.description}}</article>
   </group>
@@ -57,7 +57,7 @@
 
 </div>
 </div>
-<div class="status-3-btn" v-if="order.status === 2">
+<div class="status-3-btn" v-if="order.plan.status === 2" v-tap="modify()">
   <div class="btn-right">编辑</div>
 </div>
 <!-- <x-button slot="right" style="border-radius:0;background-color:rgb(158, 188, 43);color:#fff;margin:20px 0;width:100%" v-if="order.status==7" onclick="location.href='order-judge.html'">去评价</x-button> -->
@@ -137,17 +137,8 @@ export default {
     getScreenWidth() {
       return document.body.clientWidth
     },
-    cancelOrder(isJump){
-      this.$http.post(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}/confirmCancel`).then((res) => {
-        if(isJump){
-          window.location.href = "./worker-list.html"
-        }else{
-          alert("取消订单成功")
-          window.location.href = './order-list.html'
-        }
-      }, (res) => {
-        alert("取消订单失败，请稍候再试QAQ")
-      })
+    modify(){
+      window.location.href = `./modify.html?planId=${Lib.M.GetRequest().planId}`
     }
   }
 }

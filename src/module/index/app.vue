@@ -16,7 +16,7 @@
                             <img :src="order.customerImage">
                             <div class="tel" onclick="location.href='tel:{{order.customerMobile}}'">{{order.customerMobile}}</div>
                             <div class="name">{{order.customerName}}</div>
-                            <div class="status">{{zxStatusList[order.status].name}}</div>
+                            <div class="status">{{zxStatusList[order.plan.status].name}}</div>
                         </div>
                     </div>
                     <div v-if="zxList.length==0">
@@ -33,7 +33,7 @@
                             <img :src="order.customerImage">
                             <div class="tel" onclick="location.href='tel:{{order.customerMobile}}'">{{order.customerMobile}}</div>
                             <div class="name">{{order.customerName}}</div>
-                            <div class="status">{{zxStatusList[order.status].name}}</div>
+                            <div class="status">{{zxStatusList[order.plan.status].name}}</div>
                         </div>
                     </div>
                     <div v-if="wcList.length==0">

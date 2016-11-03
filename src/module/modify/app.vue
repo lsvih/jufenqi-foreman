@@ -1,0 +1,143 @@
+<template>
+<!-- <to-upload-photo title="房产证" value="点击拍摄|房产证" v-tap="getInfo(1)" v-if="houseInfo.local == null"></to-upload-photo>
+<img style="height:225px;width:calc(100% - 30px);margin-left:15px;" :src="houseInfo.local" v-if="houseInfo.local != null">
+<to-upload-photo style="margin-top:10px;" title="工资流水证明" value="点击拍摄|工资流水证明" v-tap="getInfo(2)" v-if="moneyInfo.local == null"></to-upload-photo>
+<img style="height:225px;width:calc(100% - 30px);margin-left:15px;margin-top:10px" :src="moneyInfo.local" v-if="moneyInfo.local != null">
+<x-button slot="right" :class="{'btn-active':isFilled()}" style="background-color:#e2e2e2;color:#fff;margin:20px 20px;width:calc( 100% - 40px )" v-tap="isFilled()?nextStep():return">提交</x-button>
+<j-tel></j-tel> -->
+<group title="请完成您的设计方案:">
+    <x-input :value.sync="order.plan.price" title="请输入方案价格"></x-input>
+</group>
+<group title="请输入您的方案描述">
+    <x-textarea :value.sync="order.plan.description"></x-textarea>
+</group>
+<group title="您的方案已有的图片" v-if="order.plan.images.length!=0">
+    <div class="plan-image" v-for="image in order.plan.images">
+        <img class="image" :src="imgUrl + image">
+        <img src="./del.png" class="del" v-tap="delExist(image,$index)">
+    </div>
+</group>
+<group title="您即将上传的方案图片" v-if="addImages.length!=0">
+    <div class="plan-image" v-for="image in addImages">
+        <img class="image" :src="mage">
+        <img src="./del.png" class="del" v-tap="delAdd($index)">
+    </div>
+</group>
+<group>
+    <j-to-upload-photo title="请上传您的方案图片" value="点击上传或拍摄您的|方案图片" v-tap="getInfo()"></j-to-upload-photo>
+</group>
+</template>
+
+<script>
+import Lib from 'assets/Lib.js'
+import Group from 'vux-components/group'
+import Cell from 'vux-components/cell'
+import XInput from 'vux-components/x-input'
+import XTextarea from 'vux-components/x-textarea'
+import JToUploadPhoto from 'components/JToUploadPhoto.vue'
+export default {
+    data() {
+        return {
+            addImages: [],
+            delImages: [],
+            order: {},
+            imgUrl: Lib.C.imgUrl
+        }
+    },
+    components: {
+        Group,
+        Cell,
+        XInput,
+        XTextarea,
+        JToUploadPhoto
+    },
+    ready() {
+        this.$http.post(`${Lib.C.wxApi}mp/jsapiTicket`, location.href).then((res) => {
+            wxReady(res.data.data)
+        }, (res) => {
+            alert("网络连接失败，请刷新重试")
+            console.log(res.data.data)
+        })
+        this.$http.get(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`).then((res) => {
+            this.order = res.data.data
+        }, (res) => {
+            alert("获取订单失败，请稍候再试QAQ")
+        })
+    },
+    methods: {
+        getInfo() {
+            let that = this
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'],
+                sourceType: ['camera', 'album'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function(res) {
+                    let thisId = res.localIds[0]
+                    wx.uploadImage({
+                        localId: thisId, // 需要上传的图片的本地ID，由chooseImage接口获得
+                        isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function(res) {
+                            var serverId = res.serverId // 返回图片的服务器端ID
+                            that.addImages.push(serverId)
+                        }
+                    })
+                }
+            })
+        },
+        delExist(imageName, index) {
+            this.delImages.push(imageName)
+            this.order.plan.images.splice(index, 1)
+        },
+        delAdd(index) {
+            this.addImages.splice(index, 1)
+        },
+        nextStep() {
+            this.$http.put(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`, {
+                "description": this.order.plan.description,
+                "price": Number(this.order.plan.price),
+                "deletedImages": this.delImages,
+                "newImages": [],
+                "newWechatImages": this.addImages
+            }).then((res) => {
+                alert("更新设计方案成功")
+                location.href = './index.html'
+            }, (res) => {
+                alert("网络连接失败，请重试")
+            })
+        }
+    }
+}
+
+function wxReady(obj) {
+    obj.debug = false
+    obj.jsApiList = ["chooseImage", "previewImage", "uploadImage", "downloadImage"]
+    wx.config(obj)
+}
+</script>
+
+<style>
+body {
+    background-color: #eee;
+}
+</style>
+<style lang="less">
+.plan-image {
+    position: relative;
+    width: calc(~"100% - 30px");
+    margin-left: 15px;
+    height: auto;
+    margin-bottom: 10px;
+    .image {
+        width: 100%;
+        height: auto;
+    }
+    .del {
+        height: 27px;
+        width: 27px;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        z-index: 2;
+    }
+}
+</style>
