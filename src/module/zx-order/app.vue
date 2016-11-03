@@ -2,8 +2,6 @@
 <header>
   <img src="status.png">
   <div class="status">{{zxStatusList[order.status].name}}</div>
-  <div class="btn" v-if="order.status==1" v-tap="cancelOrder()">取消预约</div>
-
 </header>
 <div class="butler">
   <div class="zx-butler-img"><img :src="order.manager.profileImage"></div>
@@ -18,57 +16,52 @@
 <div class="content">
   <group class="contact" style="margin-top:-1.17647059em;" v-if="order.status==1||order.status==2">
     <div class="zc-line-3">
-      <div class="zc-butler-img"><img :src="order.planList[0].foreman.profileImage"></div>
-      <div class="zc-butler-name">{{order.planList[0].foreman.nickname}}</div>
-      <div class="zc-butler-tel" onclick="location.href='tel:{{order.planList[0].foreman.mobile}}'"><img src="tel.png"></div>
-    </div>
-    <div class="zc-line-3" v-if="order.planList.length==2">
-      <div class="zc-butler-img"><img :src="order.planList[0].foreman.profileImage"></div>
-      <div class="zc-butler-name">{{order.planList[0].foreman.nickname}}</div>
-      <div class="zc-butler-tel" onclick="location.href='tel:{{order.planList[1].foreman.mobile}}'"><img src="tel.png"></div>
+      <div class="zc-butler-img"><img :src="order.plan.foreman.profileImage"></div>
+      <div class="zc-butler-name">{{order.plan.foreman.nickname}}</div>
+      <div class="zc-butler-tel" onclick="location.href='tel:{{order.plan.foreman.mobile}}'"><img src="tel.png"></div>
     </div>
 </div>
 </group>
 
-<group title="设计方案" v-if="order.status>=3">
+<group title="设计方案" v-if="order.status>=2">
   <div class="module-item">
     <scroller lock-y scrollbar-x :height=".8*getScreenWidth()*.63+20+'px'" v-ref:plan>
-      <div class="worker-product-list" :style="{width:order.planList[0].images.length*(.8*getScreenWidth()+10)+  'px',height:.8*getScreenWidth()*.63+'px'}">
-        <div class="worker-product-item" v-for="preview in order.planList[0].images" :style="{width: getScreenWidth()*.8 + 'px',height:.8*getScreenWidth()*.63+'px'}">
+      <div class="worker-product-list" :style="{width:order.plan.images.length*(.8*getScreenWidth()+10)+  'px',height:.8*getScreenWidth()*.63+'px'}">
+        <div class="worker-product-item" v-for="preview in order.plan.images" :style="{width: getScreenWidth()*.8 + 'px',height:.8*getScreenWidth()*.63+'px'}">
           <x-img class="product-img" :scroller="$refs.plan" :src="preview.src" v-tap="$refs.previewer.show($index)"></x-img>
         </div>
       </div>
     </scroller>
   </div>
 </group>
-<div class="contact" v-if="order.status>=3">
+<div class="contact" v-if="order.status>=2">
 
   <div class="zc-line-3">
-    <div class="zc-butler-img"><img :src="order.planList[0].foreman.profileImage"></div>
-    <div class="zc-butler-name">{{order.planList[0].foreman.nickname}}</div>
-    <div class="zc-butler-tel" onclick="location.href='tel:{{order.planList[0].foreman.mobile}}'"><img src="tel.png"></div>
+    <div class="zc-butler-img"><img :src="order.plan.foreman.profileImage"></div>
+    <div class="zc-butler-name">{{order.plan.foreman.nickname}}</div>
+    <div class="zc-butler-tel" onclick="location.href='tel:{{order.plan.foreman.mobile}}'"><img src="tel.png"></div>
   </div>
 
 </div>
 
-<div v-if="order.status>=3&&order.status<=6">
+<div v-if="order.status>=2&&order.status<=6">
   <group title="方案说明">
-    <article>{{order.planList[0].description}}</article>
+    <article>{{order.plan.description}}</article>
   </group>
   <group>
     <div class="zx-line-4">
       <div class="zx-line-4-name">施工报价</div>
-      <div class="zx-line-4-right">{{order.planList[0].price|currency "" 2}}</div>
+      <div class="zx-line-4-right">{{order.plan.price|currency "" 2}}</div>
     </div>
   </group>
 
 </div>
 </div>
-<div class="status-3-btn" v-if="order.status === 3">
+<div class="status-3-btn" v-if="order.status === 2">
   <div class="btn-right">编辑</div>
 </div>
 <!-- <x-button slot="right" style="border-radius:0;background-color:rgb(158, 188, 43);color:#fff;margin:20px 0;width:100%" v-if="order.status==7" onclick="location.href='order-judge.html'">去评价</x-button> -->
-<previewer :list="order.planList[0].images" v-ref:previewer :options="options"></previewer>
+<previewer :list="order.plan.images" v-ref:previewer :options="options"></previewer>
 </template>
 
 <script>
@@ -126,7 +119,7 @@ export default {
     }
   },
   ready() {
-    this.$http.get(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}`).then((res) => {
+    this.$http.get(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`).then((res) => {
       this.order = res.data.data
     }, (res) => {
       alert("获取订单失败，请稍候再试QAQ")
@@ -444,33 +437,14 @@ header {
 }
 .status-3-btn {
     position: relative;
-    width: 100%;
+    width: calc(~"100% - 30px");
+    margin-left: 15px;
+    border-radius: 2px;
     height: 44px;
+    margin-top: 10px;
     background-color: rgb(158, 188, 43);
     color: #fff;
-    .btn-left {
-        position: absolute;
-        height: 100%;
-        width: 35%;
-        background-color: #fff;
-        line-height: 44px;
-        text-align: center;
-        color: #393939;
-        left: 0;
-        img {
-            vertical-align: middle;
-            margin-right: 6px;
-            height: 15px;
-            width: 16px;
-        }
-    }
-    .btn-right {
-        position: absolute;
-        height: 100%;
-        width: 65%;
-        line-height: 44px;
-        text-align: center;
-        right: 0;
-    }
+    line-height: 44px;
+    text-align: center;
 }
 </style>

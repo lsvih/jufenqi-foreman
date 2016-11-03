@@ -12,7 +12,7 @@
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:zx>
                     <div>
-                        <div class="order" v-for="order in zcList" v-tap="viewDetail('zx',order.orderNo)">
+                        <div class="order" v-for="order in zxList" v-tap="viewDetail('zx',order.orderNo,order.plan.id)">
                             <img :src="order.customerImage">
                             <div class="tel" onclick="location.href='tel:{{order.customerMobile}}'">{{order.customerMobile}}</div>
                             <div class="name">{{order.customerName}}</div>
@@ -101,7 +101,7 @@ export default {
     ready() {
         let suc_count = 0
         this.index = (Lib.M.GetRequest().type - 1) || 0
-        this.$http.get(`${Lib.C.orderApi}decorationOrders`, {
+        this.$http.get(`${Lib.C.orderApi}decorationPlans`, {
             params: {
                 filter: `foremanId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[1,7]`
             }
@@ -130,8 +130,8 @@ export default {
             var D = (d.getDate() < 10 ? '0' + (d.getDate()) : d.getDate());
             return Y + M + D
         },
-        viewDetail(type, orderNo) {
-            eval(`window.location.href='${type}-order.html?orderNo=${orderNo}'`)
+        viewDetail(type, orderNo,planId) {
+            eval(`window.location.href='${type}-order.html?orderNo=${orderNo}&planId=${planId}'`)
         }
     }
 }
@@ -149,7 +149,7 @@ body {
 </style>
 <style scoped lang="less">
 .content {
-    padding-bottom: 45px;
+    padding-top: 45px;
 }
 header {
     position: fixed;
