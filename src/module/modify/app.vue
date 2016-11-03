@@ -55,7 +55,7 @@ export default {
         JToUploadPhoto
     },
     ready() {
-        this.$http.post(`${Lib.C.wxApi}mp/jsapiTicket`, location.href).then((res) => {
+        this.$http.post(`${Lib.C.wxApi}qy/jsapiTicket`, location.href).then((res) => {
             wxReady(res.data.data)
         }, (res) => {
             alert("网络连接失败，请刷新重试")
