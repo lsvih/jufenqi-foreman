@@ -94,7 +94,7 @@ export default {
         delAdd(index) {
             this.addImages.splice(index, 1)
         },
-        nextStep() {
+        submit() {
             this.$http.put(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`, {
                 "description": this.order.plan.description,
                 "price": Number(this.order.plan.price),
