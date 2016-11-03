@@ -19,7 +19,7 @@
 </group>
 <group title="您即将上传的方案图片" v-if="addImages.length!=0">
     <div class="plan-image" v-for="image in addImages">
-        <img class="image" :src="mage">
+        <img class="image" :src="image">
         <img src="./del.png" class="del" v-tap="delAdd($index)">
     </div>
 </group>
