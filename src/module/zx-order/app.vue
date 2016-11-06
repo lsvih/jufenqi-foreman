@@ -28,22 +28,12 @@
     <scroller lock-y scrollbar-x :height=".8*getScreenWidth()*.63+20+'px'" v-ref:plan>
       <div class="worker-product-list" :style="{width:order.plan.images.length*(.8*getScreenWidth()+10)+  'px',height:.8*getScreenWidth()*.63+'px'}">
         <div class="worker-product-item" v-for="preview in order.plan.images" :style="{width: getScreenWidth()*.8 + 'px',height:.8*getScreenWidth()*.63+'px'}">
-          <x-img class="product-img" :scroller="$refs.plan" :src="preview.src" v-tap="$refs.previewer.show($index)"></x-img>
+          <x-img class="product-img" :scroller="$refs.plan" :src="preview" v-tap="$refs.previewer.show($index)"></x-img>
         </div>
       </div>
     </scroller>
   </div>
 </group>
-<div class="contact" v-if="order.plan.status>=2">
-
-  <div class="zc-line-3">
-    <div class="zc-butler-img"><img :src="order.plan.foreman.profileImage"></div>
-    <div class="zc-butler-name">{{order.plan.foreman.nickname}}</div>
-    <div class="zc-butler-tel" onclick="location.href='tel:{{order.plan.foreman.mobile}}'"><img src="tel.png"></div>
-  </div>
-
-</div>
-
 <div v-if="order.plan.status>=2&&order.plan.status<=6">
   <group title="方案说明">
     <article>{{order.plan.description}}</article>
