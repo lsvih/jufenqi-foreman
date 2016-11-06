@@ -72,6 +72,13 @@ import XButton from 'vux-components/x-button'
 import Scroller from 'vux-components/scroller'
 import XImg from 'vux-components/x-img'
 import Previewer from 'vux-components/previewer'
+import axios from 'axios'
+try{
+  axios.defaults.headers.common['x-user-token'] = JSON.parse(localStorage.getItem("user")).token
+}catch(e){
+  localStorage.clear()
+  window.location.href = `./wxAuth.html?url=index.html`
+}
 export default {
   data() {
     return {
@@ -119,9 +126,9 @@ export default {
     }
   },
   ready() {
-    this.$http.get(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`).then((res) => {
+    axios.get(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`).then((res) => {
       this.order = res.data.data
-    }, (res) => {
+    }).catch((res) => {
       alert("获取订单失败，请稍候再试QAQ")
     })
   },

@@ -38,6 +38,13 @@ import Cell from 'vux-components/cell'
 import XInput from 'vux-components/x-input'
 import XTextarea from 'vux-components/x-textarea'
 import JToUploadPhoto from 'components/JToUploadPhoto.vue'
+import axios from 'axios'
+try{
+  axios.defaults.headers.common['x-user-token'] = JSON.parse(localStorage.getItem("user")).token
+}catch(e){
+  localStorage.clear()
+  window.location.href = `./wxAuth.html?url=index.html`
+}
 export default {
     data() {
         return {
@@ -55,13 +62,16 @@ export default {
         JToUploadPhoto
     },
     ready() {
-        this.$http.post(`${Lib.C.wxApi}qy/jsapiTicket`, location.href).then((res) => {
+        axios.post(`${Lib.C.wxApi}qy/jsapiTicket`, {url:location.href}, {
+            withCredentials: true,
+            responseType: 'json'
+        }).then((res) => {
             wxReady(res.data.data)
-        }, (res) => {
+        }).catch((res) => {
             alert("网络连接失败，请刷新重试")
             console.log(res.data.data)
         })
-        this.$http.get(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`).then((res) => {
+        axios.get(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`).then((res) => {
             this.order = res.data.data
         }, (res) => {
             alert("获取订单失败，请稍候再试QAQ")
@@ -102,16 +112,19 @@ export default {
             this.addImages.map((e) => {
                 upImg.push(e.server)
             })
-            this.$http.put(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`, {
+            axios.put(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}`, {
                 "description": this.order.plan.description,
                 "price": Number(this.order.plan.price),
                 "deletedImages": this.delImages,
                 "newImages": [],
                 "newWechatImages": upImg
+            }, {
+                withCredentials: true,
+                responseType: 'json'
             }).then((res) => {
                 alert("更新设计方案成功")
                 location.href = './index.html'
-            }, (res) => {
+            }).catch((res) => {
                 alert("网络连接失败，请重试")
             })
         }

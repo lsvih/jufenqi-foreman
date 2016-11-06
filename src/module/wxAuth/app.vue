@@ -4,6 +4,7 @@
 
 <script>
 import Lib from 'assets/Lib.js'
+import axios from 'axios'
 export default {
     data() {
         return {
@@ -22,17 +23,16 @@ export default {
     methods: {
         getCode() {
             if (this.code) {
-                this.$http.post(`${Lib.C.userApi}auth/loginUsingWechatQy`, {
-                    code: this.code
-                }, {
-                    xhr: {
-                        withCredentials: true
+                axios.post(`${Lib.C.userApi}auth/loginUsingWechatQy`, {}, {
+                    params: {
+                        code: this.code
                     },
-                    emulateJSON: true
+                    withCredentials: true,
+                    responseType: 'json'
                 }).then((res) => {
                     window.localStorage.setItem("user", JSON.stringify(res.data.data))
                     location.href = this.lastUrl
-                }, (res) => {
+                }).catch((res) => {
                     alert("微信登录失败，请稍后重试")
                     console.log(res)
                     return false;

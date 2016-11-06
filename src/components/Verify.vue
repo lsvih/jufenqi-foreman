@@ -47,13 +47,12 @@ export default {
     send(){
       let that = this
       this.$parent.loading=true
-      this.$http.post(`${Lib.C.userApi}sms/sendCode`, {
-        mobile: this.$parent.phoneNumber
-      }, {
-        xhr: {
-          withCredentials: true
+      axios.post(`${Lib.C.userApi}sms/sendCode`, {}, {
+        params: {
+            mobile: this.$parent.phoneNumber
         },
-        emulateJSON: true
+        withCredentials: true,
+        responseType: 'json'
       }).then((res)=>{
         this.$parent.loading = false
         this.time = 60
@@ -86,20 +85,19 @@ export default {
       return num
     },
     submit(){
-      this.$http.post(`${Lib.C.userApi}auth/registerUsingMobile`, {
-        mobile: this.$parent.phoneNumber,
-        userId: JSON.parse(localStorage.getItem("user")).userId,
-        code: this.verifyNumber,
-        // password:??
-      }, {
-        xhr: {
-          withCredentials: true
-        },
-        emulateJSON: true
+      axios.post(`${Lib.C.userApi}auth/registerUsingMobile`, {}, {
+          params: {
+              mobile: this.$parent.phoneNumber,
+              userId: JSON.parse(localStorage.getItem("user")).userId,
+              code: this.verifyNumber
+              // password:??
+          },
+          withCredentials: true,
+          responseType: 'json'
       }).then((res)=>{
         window.localStorage.setItem("user",JSON.stringify(res.data.data))
         location.href = this.$parent.lastUrl
-      },(res)=>{
+      }).catch((res)=>{
         this.alarm = true
         this.$parent.loading = false
         this.msg = "验证码错误，请重试"
