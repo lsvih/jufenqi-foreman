@@ -28,7 +28,7 @@
     <scroller lock-y scrollbar-x :height=".8*getScreenWidth()*.63+20+'px'" v-ref:plan>
       <div class="worker-product-list" :style="{width:order.plan.images.length*(.8*getScreenWidth()+10)+  'px',height:.8*getScreenWidth()*.63+'px'}">
         <div class="worker-product-item" v-for="preview in order.plan.images" :style="{width: getScreenWidth()*.8 + 'px',height:.8*getScreenWidth()*.63+'px'}">
-          <x-img class="product-img" :scroller="$refs.plan" :src="preview" v-tap="$refs.previewer.show($index)"></x-img>
+          <x-img class="product-img" :scroller="$refs.plan" :src="imgUrl + preview" v-tap="$refs.previewer.show($index)"></x-img>
         </div>
       </div>
     </scroller>
@@ -73,6 +73,7 @@ export default {
   data() {
     return {
       order: {},
+      imgUrl: Lib.C.imgUrl,
       zxStatusList: [{
         status: 0,
         name: "订单已删除"
