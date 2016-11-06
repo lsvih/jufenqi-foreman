@@ -115,7 +115,7 @@ export default {
         }).then((res) => {
             res.data.data.map((e) => {
                 if (e.status == 7) {
-                    this.wzList.push(e)
+                    this.wcList.push(e)
                 } else {
                     this.zxList.push(e)
                 }
@@ -123,6 +123,7 @@ export default {
             this.$refs.zx.reset()
             this.$refs.wc.reset()
         }).catch((res) => {
+            console.log(res)
             alert("获取订单失败，请稍候再试QAQ")
         })
     },
