@@ -47,7 +47,7 @@
 
 </div>
 </div>
-<div class="status-3-btn" v-if="order.plan.status === 2" v-tap="modify()">
+<div class="status-3-btn" v-if="order.plan.status === 2&&(!order.plan.updated)" v-tap="modify()">
   <div class="btn-right">编辑</div>
 </div>
 <!-- <x-button slot="right" style="border-radius:0;background-color:rgb(158, 188, 43);color:#fff;margin:20px 0;width:100%" v-if="order.status==7" onclick="location.href='order-judge.html'">去评价</x-button> -->
