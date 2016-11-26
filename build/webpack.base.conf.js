@@ -29,6 +29,7 @@ module.exports = {
       'assets': path.resolve(__dirname, '../src/assets'),
       'components': path.resolve(__dirname, '../src/components'),
       'vux-components': 'vux/src/components',
+      'common': path.resolve(__dirname, '../../jufenqi-common')
     }
   },
   resolveLoader: {
