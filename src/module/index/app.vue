@@ -29,7 +29,7 @@
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:wc>
                     <div>
-                        <div class="order" v-for="order in wcList" v-tap="viewDetail('zx',order.orderNo)">
+                        <div class="order" v-for="order in wcList" v-tap="viewDetail('zx',order.orderNo,order.plan.id)">
                             <img :src="order.customerImage">
                             <div class="tel" onclick="location.href='tel:{{order.customerMobile}}'">{{order.customerMobile}}</div>
                             <div class="name">{{order.customerName}}</div>
@@ -49,23 +49,25 @@
 <script>
 import Lib from 'assets/Lib.js'
 import {
-  Tab,
-  TabItem
+    Tab,
+    TabItem
 } from 'vux-components/tab'
 import Swiper from 'vux-components/swiper'
 import SwiperItem from 'vux-components/swiper-item'
 import Scroller from 'vux-components/scroller'
 import axios from 'axios'
-try{
-  axios.defaults.headers.common['x-user-token'] = JSON.parse(localStorage.getItem("user")).token
-}catch(e){
-  localStorage.clear()
-  window.location.href = `./wxAuth.html?url=index.html`
+try {
+    axios.defaults.headers.common['x-user-token'] = JSON.parse(localStorage.getItem("user")).token
+} catch (e) {
+    localStorage.clear()
+    window.location.href = `./wxAuth.html?url=index.html`
 }
 export default {
     data() {
         return {
             index: 0,
+            zxList: [],
+            wcList: [],
             zxStatusList: [{
                 status: 0,
                 name: "订单已删除"
@@ -94,16 +96,14 @@ export default {
                 status: 8,
                 name: "订单已取消"
             }],
-            zxList: [],
-            wcList: [],
         }
     },
     components: {
-      Tab,
-      TabItem,
-      Swiper,
-      SwiperItem,
-      Scroller
+        Tab,
+        TabItem,
+        Swiper,
+        SwiperItem,
+        Scroller,
     },
     ready() {
         let suc_count = 0
@@ -128,9 +128,9 @@ export default {
         })
     },
     methods: {
-      getScreenHeight() {
-        return document.body.clientHeight
-      },
+        getScreenHeight() {
+            return document.body.clientHeight
+        },
         getTime(timeStamp) {
             var d = new Date(timeStamp * 1000);
             var Y = d.getFullYear() + '-';
@@ -138,7 +138,7 @@ export default {
             var D = (d.getDate() < 10 ? '0' + (d.getDate()) : d.getDate());
             return Y + M + D
         },
-        viewDetail(type, orderNo,planId) {
+        viewDetail(type, orderNo, planId) {
             eval(`window.location.href='${type}-order.html?orderNo=${orderNo}&planId=${planId}'`)
         }
     }
@@ -170,6 +170,29 @@ header {
 .tab-active {
     color: #88C929 !important;
     border-color: #88C929 !important;
+}
+.no-data {
+    position: relative;
+    width: 100%;
+    img {
+        position: absolute;
+        top: 220px;
+        left: calc( ~"50% - 35.5px" );
+        height: 71px;
+        width: 71px;
+    }
+    span {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 16px;
+        font-size: 16px;
+        line-height: 16px;
+        left: 0;
+        top: 307px;
+        color: #DADADA;
+        text-align: center;
+    }
 }
 .order {
     width: calc(~"100% - 15px");
@@ -206,29 +229,6 @@ header {
         height: 80px;
         line-height: 80px;
         color: #3BA794;
-    }
-}
-.no-data {
-    position: relative;
-    width: 100%;
-    img {
-        position: absolute;
-        top: 220px;
-        left: calc( ~"50% - 35.5px" );
-        height: 71px;
-        width: 71px;
-    }
-    span {
-        display: block;
-        position: absolute;
-        width: 100%;
-        height: 16px;
-        font-size: 16px;
-        line-height: 16px;
-        left: 0;
-        top: 307px;
-        color: #DADADA;
-        text-align: center;
     }
 }
 </style>
