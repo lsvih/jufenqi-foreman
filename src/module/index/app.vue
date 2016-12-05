@@ -2,28 +2,61 @@
 <div>
     <header>
         <tab active-color='#88C929' :index.sync="index">
-            <tab-item active-class="tab-active" :selected="index === 0" v-tap="index = 0">装修订单</tab-item>
-            <tab-item active-class="tab-active" :selected="index === 1" v-tap="index = 1">已完成</tab-item>
+            <tab-item class="tab" active-class="tab-active" :selected="index === 0" v-tap="index = 0">已预约</tab-item>
+            <tab-item class="tab" active-class="tab-active" :selected="index === 1" v-tap="index = 1">待选方案</tab-item>
+            <tab-item class="tab" active-class="tab-active" :selected="index === 2" v-tap="index = 2">待支付</tab-item>
+            <tab-item class="tab" active-class="tab-active" :selected="index === 3" v-tap="index = 3">待施工</tab-item>
+            <tab-item class="tab" active-class="tab-active" :selected="index === 4" v-tap="index = 4">施工中</tab-item>
         </tab>
     </header>
 
     <swiper :index.sync="index" :height="getScreenHeight()+'px'" :show-dots="false">
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
-                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:zx>
-                    <no-data v-if="zxList.length==0"></no-data>
+                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:yy>
+                    <no-data v-if="list0.length==0"></no-data>
                     <div v-else>
-                        <j-order-block v-for="order in zxList" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :status="Status.zx[order.plan.status].name"></j-order-block>
+                        <j-order-block v-for="order in list0" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
                     </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
-                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:wc>
-                    <no-data v-if="wcList.length==0"></no-data>
+                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:dx>
+                    <no-data v-if="list1.length==0"></no-data>
                     <div v-else>
-                        <j-order-block v-for="order in wcList" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :status="Status.zx[order.plan.status].name"></j-order-block>
+                        <j-order-block v-for="order in list1" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    </div>
+                </scroller>
+            </div>
+        </swiper-item>
+        <swiper-item height="100%">
+            <div class="tab-swiper vux-center content">
+                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:zf>
+                    <no-data v-if="list2.length==0"></no-data>
+                    <div v-else>
+                        <j-order-block v-for="order in list2" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    </div>
+                </scroller>
+            </div>
+        </swiper-item>
+        <swiper-item height="100%">
+            <div class="tab-swiper vux-center content">
+                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:sg>
+                    <no-data v-if="list3.length==0"></no-data>
+                    <div v-else>
+                        <j-order-block v-for="order in list3" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    </div>
+                </scroller>
+            </div>
+        </swiper-item>
+        <swiper-item height="100%">
+            <div class="tab-swiper vux-center content">
+                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:sgz>
+                    <no-data v-if="list4.length==0"></no-data>
+                    <div v-else>
+                        <j-order-block v-for="order in list4" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
                     </div>
                 </scroller>
             </div>
@@ -46,7 +79,12 @@ import NoData from 'common/components/no-data'
 import axios from 'axios'
 import Status from 'common/status'
 try {
-    axios.defaults.headers.common['x-user-token'] = JSON.parse(localStorage.getItem("user")).token
+    let now = Number(new Date().getTime())
+    if (Number(JSON.parse(localStorage.user).expiredAt) < now) {
+        localStorage.removeItem('user')
+        location.href = './wxAuth.html?url=' + encodeURIComponent(location.href)
+    }
+    axios.defaults.headers.common['Authorization'] = JSON.parse(localStorage.getItem("user")).tokenType + ' ' + JSON.parse(localStorage.getItem("user")).token
 } catch (e) {
     localStorage.clear()
     window.location.href = `./wxAuth.html?url=index.html`
@@ -55,8 +93,11 @@ export default {
     data() {
         return {
             index: 0,
-            zxList: [],
-            wcList: [],
+            list0: [],
+            list1: [],
+            list2: [],
+            list3: [],
+            list4: [],
             Status
         }
     },
@@ -74,21 +115,43 @@ export default {
         this.index = (Lib.M.GetRequest().type - 1) || 0
         axios.get(`${Lib.C.orderApi}decorationPlans`, {
             params: {
-                filter: `foremanId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[1,7]`
+                filter: `foremanId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[1,6]`
             }
         }).then((res) => {
             res.data.data.map((e) => {
-                if (e.status == 7) {
-                    this.wcList.push(e)
-                } else {
-                    this.zxList.push(e)
+                switch (e.status) {
+                    case 1:
+                        this.list0.push(e)
+                        break;
+                    case 2:
+                        this.list0.push(e)
+                        break;
+                    case 3:
+                        this.list1.push(e)
+                        break;
+                    case 4:
+                        this.list2.push(e)
+                        break;
+                    case 5:
+                        this.list3.push(e)
+                        break;
+                    case 6:
+                        this.list4.push(e)
+                        break;
+                    default:
+                        break;
                 }
             })
-            this.$refs.zx.reset()
-            this.$refs.wc.reset()
-        }).catch((res) => {
-            console.log(res)
+            setTimeout(() => {
+                this.$refs.yy.reset()
+                this.$refs.dx.reset()
+                this.$refs.zf.reset()
+                this.$refs.sg.reset()
+                this.$refs.sgz.reset()
+            }, 500)
+        }).catch((err) => {
             alert("获取订单失败，请稍候再试QAQ")
+            throw err
         })
     },
     methods: {
@@ -134,5 +197,8 @@ header {
 .tab-active {
     color: #88C929 !important;
     border-color: #88C929 !important;
+}
+.tab {
+    font-size: 12px!important;
 }
 </style>

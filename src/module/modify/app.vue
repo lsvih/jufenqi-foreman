@@ -39,9 +39,14 @@ import XInput from 'vux-components/x-input'
 import XTextarea from 'vux-components/x-textarea'
 import JToUploadPhoto from 'components/JToUploadPhoto.vue'
 import axios from 'axios'
-try{
-  axios.defaults.headers.common['x-user-token'] = JSON.parse(localStorage.getItem("user")).token
-}catch(e){
+try {
+  let now = Number(new Date().getTime())
+  if (Number(JSON.parse(localStorage.user).expiredAt) < now) {
+    localStorage.removeItem('user')
+    location.href = './wxAuth.html?url=' + encodeURIComponent(location.href)
+  }
+  axios.defaults.headers.common['Authorization'] = JSON.parse(localStorage.getItem("user")).tokenType + ' ' + JSON.parse(localStorage.getItem("user")).token
+} catch (e) {
   localStorage.clear()
   window.location.href = `./wxAuth.html?url=index.html`
 }
