@@ -1,9 +1,9 @@
 <template>
 <group title="请完成您的设计方案:">
-    <x-input :value.sync="order.plan.price" title="请输入方案价格" keyborad="number"></x-input>
+    <x-input :value.sync="order.plan.price" title="请输入方案价格"></x-input>
 </group>
 <group title="请输入您的方案描述">
-    <x-textarea :value.sync="order.plan.description" :max="200" placeholder="方案描述"></x-textarea>
+    <x-textarea :value.sync="order.plan.description" placeholder="方案描述"></x-textarea>
 </group>
 <group title="您的方案已有的图片" v-if="order.plan.images.length!=0">
     <div class="plan-image" v-for="image in order.plan.images">
