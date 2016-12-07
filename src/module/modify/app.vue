@@ -26,7 +26,7 @@
 <group>
     <j-to-upload-photo title="请上传您的方案图片" value="点击上传或拍摄您的|方案图片" v-tap="getInfo()"></j-to-upload-photo>
 </group>
-<div class="status-3-btn" v-tap="submit()">
+<div class="status-3-btn" :class="isFilled()" v-tap="isFilled()?submit():return">
     <div class="btn-right">确认修改</div>
 </div>
 </template>
@@ -132,6 +132,9 @@ export default {
             }).catch((res) => {
                 alert("网络连接失败，请重试")
             })
+        },
+        isFilled(){
+          return !!(this.addImages.length>0&&this.order.plan.price)
         }
     }
 }
@@ -175,9 +178,12 @@ body {
     border-radius: 2px;
     height: 44px;
     margin-top: 10px;
-    background-color: rgb(158, 188, 43);
+    background-color: rgb(226, 226, 226);
     color: #fff;
     line-height: 44px;
     text-align: center;
+}
+.active{
+  background-color: rgb(158, 188, 43);
 }
 </style>
