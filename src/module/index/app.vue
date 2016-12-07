@@ -92,7 +92,7 @@ try {
 export default {
     data() {
         return {
-            index: 0,
+            index: Lib.M.GetRequest().type ? Number(Lib.M.GetRequest().type - 1) : 0,
             list0: [],
             list1: [],
             list2: [],
@@ -112,7 +112,6 @@ export default {
     },
     ready() {
         let suc_count = 0
-        this.index = (Lib.M.GetRequest().type - 1) || 0
         axios.get(`${Lib.C.orderApi}decorationPlans`, {
             params: {
                 filter: `foremanId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[1,6]`
