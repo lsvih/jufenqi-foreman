@@ -14,60 +14,60 @@
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:yy>
-                  <div>
-                    <no-data v-if="list0.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list0" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    <div>
+                        <no-data v-if="list0.length==0"></no-data>
+                        <div v-else>
+                            <j-order-block v-for="order in list0" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:dx>
-                  <div>
-                    <no-data v-if="list1.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list1" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    <div>
+                        <no-data v-if="list1.length==0"></no-data>
+                        <div v-else>
+                            <j-order-block v-for="order in list1" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:zf>
-                  <div>
-                    <no-data v-if="list2.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list2" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    <div>
+                        <no-data v-if="list2.length==0"></no-data>
+                        <div v-else>
+                            <j-order-block v-for="order in list2" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:sg>
-                  <div>
-                    <no-data v-if="list3.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list3" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    <div>
+                        <no-data v-if="list3.length==0"></no-data>
+                        <div v-else>
+                            <j-order-block v-for="order in list3" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
                 <scroller :height="getScreenHeight()-88+'px'" lock-x scroller-y v-ref:sgz>
-                  <div>
-                    <no-data v-if="list4.length==0"></no-data>
-                    <div v-else>
-                        <j-order-block v-for="order in list4" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                    <div>
+                        <no-data v-if="list4.length==0"></no-data>
+                        <div v-else>
+                            <j-order-block v-for="order in list4" v-tap="viewDetail('zx',order.orderNo,order.plan.id)" :img="order.customerImage" :name="order.customerName" :tel="order.customerMobile" :time="getTime(order.createdAt)"></j-order-block>
+                        </div>
                     </div>
-                  </div>
                 </scroller>
             </div>
         </swiper-item>
@@ -127,7 +127,9 @@ export default {
         let suc_count = 0
         axios.get(`${Lib.C.orderApi}decorationPlans`, {
             params: {
-                filter: `foremanId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[1,6]`
+                filter: `foremanId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[1,6]`,
+                sort: 'createdAt,DESC',
+                size: 1000
             }
         }).then((res) => {
             res.data.data.map((e) => {

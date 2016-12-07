@@ -1,15 +1,9 @@
 <template>
-<!-- <to-upload-photo title="房产证" value="点击拍摄|房产证" v-tap="getInfo(1)" v-if="houseInfo.local == null"></to-upload-photo>
-<img style="height:225px;width:calc(100% - 30px);margin-left:15px;" :src="houseInfo.local" v-if="houseInfo.local != null">
-<to-upload-photo style="margin-top:10px;" title="工资流水证明" value="点击拍摄|工资流水证明" v-tap="getInfo(2)" v-if="moneyInfo.local == null"></to-upload-photo>
-<img style="height:225px;width:calc(100% - 30px);margin-left:15px;margin-top:10px" :src="moneyInfo.local" v-if="moneyInfo.local != null">
-<x-button slot="right" :class="{'btn-active':isFilled()}" style="background-color:#e2e2e2;color:#fff;margin:20px 20px;width:calc( 100% - 40px )" v-tap="isFilled()?nextStep():return">提交</x-button>
-<j-tel></j-tel> -->
 <group title="请完成您的设计方案:">
     <x-input :value.sync="order.plan.price" title="请输入方案价格" keyborad="number"></x-input>
 </group>
 <group title="请输入您的方案描述">
-    <x-textarea :value.sync="order.plan.description"></x-textarea>
+    <x-textarea :value.sync="order.plan.description" :max="200" placeholder="方案描述"></x-textarea>
 </group>
 <group title="您的方案已有的图片" v-if="order.plan.images.length!=0">
     <div class="plan-image" v-for="image in order.plan.images">
@@ -26,7 +20,7 @@
 <group>
     <j-to-upload-photo title="请上传您的方案图片" value="点击上传或拍摄您的|方案图片" v-tap="getInfo()"></j-to-upload-photo>
 </group>
-<div class="status-3-btn" :class="isFilled()" v-tap="isFilled()?submit():return">
+<div class="status-3-btn" :class="{'active':isFilled()}" v-tap="isFilled()?submit():return">
     <div class="btn-right">确认修改</div>
 </div>
 </template>
