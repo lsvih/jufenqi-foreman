@@ -196,7 +196,7 @@ body {
     height: 100%;
 }
 </style>
-<style scoped lang="less">
+<style lang="less">
 .content {
     padding-top: 45px;
 }
@@ -209,10 +209,10 @@ header {
     z-index: 30;
 }
 .tab-active {
-    color: #88C929 !important;
-    border-color: #88C929 !important;
+    color: #88C929;
+    border-color: #88C929;
 }
 .tab {
-    font-size: 12px!important;
+    font-size: 12px;
 }
 </style>
