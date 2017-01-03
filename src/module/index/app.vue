@@ -125,7 +125,7 @@ export default {
     },
     ready() {
         let suc_count = 0
-        axios.get(`${Lib.C.orderApi}decorationPlans`, {
+        axios.get(`${Lib.C.orderApi}decorationOrders/byForeman`, {
             params: {
                 filter: `foremanId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[1,6]`,
                 sort: 'createdAt,DESC',
@@ -179,8 +179,11 @@ export default {
             var D = (d.getDate() < 10 ? '0' + (d.getDate()) : d.getDate());
             return Y + M + D
         },
-        viewDetail(type, orderNo, planId) {
-            eval(`window.location.href='${type}-order.html?orderNo=${orderNo}&planId=${planId}'`)
+        // viewDetail(type, orderNo, planId) {
+        //     eval(`window.location.href='${type}-order.html?orderNo=${orderNo}&planId=${planId}'`)
+        // }
+        viewDetail(type, orderNo) {
+            window.location.href=`${type}-order.html?orderNo=${orderNo}`
         }
     }
 }
