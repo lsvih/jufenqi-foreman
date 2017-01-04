@@ -182,8 +182,8 @@ export default {
         // viewDetail(type, orderNo, planId) {
         //     eval(`window.location.href='${type}-order.html?orderNo=${orderNo}&planId=${planId}'`)
         // }
-        viewDetail(type, orderNo, planId) {
-            window.location.href=`${type}-order.html?orderNo=${orderNo}&planId=${planId}`
+        viewDetail(type, orderNo) {
+            window.location.href=`${type}-order.html?orderNo=${orderNo}`
         }
     }
 }
