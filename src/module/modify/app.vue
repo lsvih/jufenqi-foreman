@@ -70,7 +70,7 @@ export default {
             alert("网络连接失败，请刷新重试")
             console.log(res.data.data)
         })
-        axios.get(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}/byForeman`).then((res) => {
+        axios.get(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}/byForeman`).then((res) => {
             this.order = res.data.data
         }, (res) => {
             alert("获取订单失败，请稍候再试QAQ")
@@ -111,7 +111,7 @@ export default {
             this.addImages.map((e) => {
                 upImg.push(e.server)
             })
-            axios.put(`${Lib.C.orderApi}decorationPlans/${Lib.M.GetRequest().planId}/byForeman`, {
+            axios.put(`${Lib.C.orderApi}decorationPlans/${order.plan.id}/byForeman`, {
                 "description": this.order.plan.description,
                 "price": Number(this.order.plan.price),
                 // "deletedImages": this.delImages,
