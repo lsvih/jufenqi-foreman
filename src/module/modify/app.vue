@@ -113,7 +113,7 @@ export default {
             this.addImages.map((e) => {
                 upImg.push(e.server)
             })
-            axios.put(`${Lib.C.orderApi}decorationPlans/${myPlanId}/byForeman`, {
+            axios.put(`${Lib.C.orderApi}decorationPlans/${this.myPlanId}/byForeman`, {
                 "description": this.order.plan.description,
                 "price": Number(this.order.plan.price),
                 // "deletedImages": this.delImages,
