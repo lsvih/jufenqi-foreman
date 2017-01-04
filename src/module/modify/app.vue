@@ -50,7 +50,8 @@ export default {
             addImages: [],
             delImages: [],
             order: {},
-            imgUrl: Lib.C.imgUrl
+            imgUrl: Lib.C.imgUrl,
+            myPlanId: ""
         }
     },
     components: {
@@ -72,6 +73,7 @@ export default {
         })
         axios.get(`${Lib.C.orderApi}decorationOrders/${Lib.M.GetRequest().orderNo}/byForeman`).then((res) => {
             this.order = res.data.data
+            this.myPlanId = this.order.plan.id
         }, (res) => {
             alert("获取订单失败，请稍候再试QAQ")
         })
@@ -111,7 +113,7 @@ export default {
             this.addImages.map((e) => {
                 upImg.push(e.server)
             })
-            axios.put(`${Lib.C.orderApi}decorationPlans/${order.plan.id}/byForeman`, {
+            axios.put(`${Lib.C.orderApi}decorationPlans/${myPlanId}/byForeman`, {
                 "description": this.order.plan.description,
                 "price": Number(this.order.plan.price),
                 // "deletedImages": this.delImages,
