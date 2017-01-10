@@ -17,7 +17,7 @@ export default {
     data() {
         return {
             moduleClass: [{
-                name: '订单列表',
+                name: '我的订单',
                 ename: 'index',
                 icon: indexIcon,
                 actIcon: indexIconAct

@@ -125,7 +125,7 @@ export default {
     },
     ready() {
         let suc_count = 0
-        axios.get(`${Lib.C.orderApi}decorationPlans`, {
+        axios.get(`${Lib.C.orderApi}decorationOrders/byForeman`, {
             params: {
                 filter: `foremanId:${JSON.parse(window.localStorage.getItem('user')).userId}|status:[1,6]`,
                 sort: 'createdAt,DESC',
@@ -179,8 +179,11 @@ export default {
             var D = (d.getDate() < 10 ? '0' + (d.getDate()) : d.getDate());
             return Y + M + D
         },
-        viewDetail(type, orderNo, planId) {
-            eval(`window.location.href='${type}-order.html?orderNo=${orderNo}&planId=${planId}'`)
+        // viewDetail(type, orderNo, planId) {
+        //     eval(`window.location.href='${type}-order.html?orderNo=${orderNo}&planId=${planId}'`)
+        // }
+        viewDetail(type, orderNo) {
+            window.location.href=`${type}-order.html?orderNo=${orderNo}`
         }
     }
 }
@@ -196,7 +199,7 @@ body {
     height: 100%;
 }
 </style>
-<style scoped lang="less">
+<style lang="less">
 .content {
     padding-top: 45px;
 }
@@ -209,10 +212,10 @@ header {
     z-index: 30;
 }
 .tab-active {
-    color: #88C929 !important;
-    border-color: #88C929 !important;
+    color: #88C929;
+    border-color: #88C929;
 }
 .tab {
-    font-size: 12px!important;
+    font-size: 12px;
 }
 </style>
